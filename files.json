@@ -1,0 +1,53 @@
+{
+  "files": [
+    {
+      "path": "apps/web/app/page.tsx",
+      "purpose": "Next.js home route that mounts the VS Code-like AppShell.",
+      "exports": [
+        "default"
+      ],
+      "deps": [
+        "@ui/shell/AppShell",
+        "@utils/telemetry/telemetry"
+      ]
+    },
+    {
+      "path": "packages/ui/src/shell/AppShell.tsx",
+      "purpose": "Main chrome layout: activity bar + sidebar + editor + bottom panel + status bar + command palette.",
+      "exports": [
+        "AppShell"
+      ],
+      "deps": [
+        "react-resizable-panels"
+      ]
+    },
+    {
+      "path": "packages/ui/src/state/appStore.ts",
+      "purpose": "Zustand store: role, command palette, editor text, simulated run/log/artifacts state.",
+      "exports": [
+        "useAppStore"
+      ],
+      "deps": [
+        "zustand",
+        "@utils/ids/ids"
+      ]
+    },
+    {
+      "path": "packages/utils/src/telemetry/telemetry.ts",
+      "purpose": "Telemetry stub with platform metric names.",
+      "exports": [
+        "telemetry"
+      ],
+      "deps": []
+    },
+    {
+      "path": "apps/web/src/test/AppShell.spec.tsx",
+      "purpose": "Smoke tests for shell + command palette shortcut + run start.",
+      "exports": [],
+      "deps": [
+        "vitest",
+        "@testing-library/react"
+      ]
+    }
+  ]
+}
