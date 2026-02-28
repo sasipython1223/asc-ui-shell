@@ -1,11 +1,21 @@
-import { create } from "zustand";
-import type { Role } from "@utils/rbac/rbac";
 import { uid } from "@utils/ids/ids";
+import type { Role } from "@utils/rbac/rbac";
+import { create } from "zustand";
 
 export type JobStatus = "idle" | "running" | "success" | "error" | "canceled";
 
-export type JobLog = { id: string; at: string; level: "info" | "warn" | "error"; msg: string };
-export type Artifact = { id: string; name: string; kind: "diff" | "report" | "export"; content: string };
+export type JobLog = {
+  id: string;
+  at: string;
+  level: "info" | "warn" | "error";
+  msg: string;
+};
+export type Artifact = {
+  id: string;
+  name: string;
+  kind: "diff" | "report" | "export";
+  content: string;
+};
 
 type AppState = {
   role: Role;
@@ -40,8 +50,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   commandPaletteOpen: false,
   setCommandPaletteOpen: (commandPaletteOpen) => set({ commandPaletteOpen }),
 
-  editorText: "// Welcome. Use Ctrl/Cmd+K for commands. Click Run Schedule to simulate a background job.
-",
+  editorText: "// Welcome. Use Ctrl/Cmd+K for commands. Click Run Schedule to simulate a background job.\\n",
+
   setEditorText: (editorText) => set({ editorText }),
 
   jobId: null,
@@ -58,8 +68,15 @@ export const useAppStore = create<AppState>((set, get) => ({
       jobStatus: "running",
       jobProgressPct: 0,
       jobStep: "Queueing",
-      logs: [{ id: uid("log"), at: isoNow(), level: "info", msg: `Run ${id} queued` }],
-      artifacts: []
+      logs: [
+        {
+          id: uid("log"),
+          at: isoNow(),
+          level: "info",
+          msg: `Run ${id} queued`,
+        },
+      ],
+      artifacts: [],
     });
 
     // Simulated background run stream
@@ -68,7 +85,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       "Compute schedule",
       "Persist results",
       "Generate diff",
-      "Finalize artifacts"
+      "Finalize artifacts",
     ];
     let i = 0;
     const tick = () => {
@@ -82,8 +99,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         jobStep: step,
         logs: [
           ...get().logs,
-          { id: uid("log"), at: isoNow(), level: "info", msg: `Step: ${step}` }
-        ]
+          { id: uid("log"), at: isoNow(), level: "info", msg: `Step: ${step}` },
+        ],
       });
 
       i += 1;
@@ -94,12 +111,27 @@ export const useAppStore = create<AppState>((set, get) => ({
           jobStep: "Completed",
           logs: [
             ...get().logs,
-            { id: uid("log"), at: isoNow(), level: "info", msg: "Run completed" }
+            {
+              id: uid("log"),
+              at: isoNow(),
+              level: "info",
+              msg: "Run completed",
+            },
           ],
           artifacts: [
-            { id: uid("art"), name: "schedule.diff.json", kind: "diff", content: "{\n  \"changed\": 42\n}\n" },
-            { id: uid("art"), name: "summary.report.md", kind: "report", content: "# Run Summary\n\n- OK\n" }
-          ]
+            {
+              id: uid("art"),
+              name: "schedule.diff.json",
+              kind: "diff",
+              content: '{\n  "changed": 42\n}\n',
+            },
+            {
+              id: uid("art"),
+              name: "summary.report.md",
+              kind: "report",
+              content: "# Run Summary\n\n- OK\n",
+            },
+          ],
         });
         return;
       }
@@ -117,10 +149,15 @@ export const useAppStore = create<AppState>((set, get) => ({
       jobStep: "Canceled",
       logs: [
         ...get().logs,
-        { id: uid("log"), at: isoNow(), level: "warn", msg: "Run canceled by user" }
-      ]
+        {
+          id: uid("log"),
+          at: isoNow(),
+          level: "warn",
+          msg: "Run canceled by user",
+        },
+      ],
     });
   },
 
-  clearArtifacts: () => set({ artifacts: [] })
+  clearArtifacts: () => set({ artifacts: [] }),
 }));
